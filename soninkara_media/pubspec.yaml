@@ -1,0 +1,42 @@
+name: soninkara_media
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.4.0
+  video_player: ^2.10.0
+  badges: ^3.1.2
+  just_audio: ^0.10.4
+  font_awesome_flutter: ^10.8.0
+  url_launcher: ^6.3.1
+  assets: ^0.0.2
+  flutter_secure_storage: ^9.2.4
+  date_format: ^2.0.9
+  intl: ^0.20.2
+  chewie: ^1.11.3
+  share_plus: ^11.0.0
+  flutter_vector_icons: ^2.0.0
+  audioplayers: ^6.4.0
+  cached_network_image: ^3.4.1
+  full_screen_image: ^2.0.0
+  shared_preferences: ^2.2.2
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+assets:
+    - assets/images/

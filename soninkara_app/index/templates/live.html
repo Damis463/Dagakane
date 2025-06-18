@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang= "fr ">
+<head>
+  <meta charset= "UTF-8 ">
+  <title>Actualités – Soninkara Média</title>
+  <link rel= "stylesheet " href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css ">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    Body {
+      Padding-top : 80px ; /* pour compenser le fixed-top */
+    }
+  </style>
+</head>
+<body>
+
+<nav class= "navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top ">
+  <div class= "container ">
+    <a class= "navbar-brand fw-bold " href= "{% url 'home' %} ">
+      Soninkara Média
+    </a>
+
+    <div class= "ms-auto ">
+      <a href= "{% url 'home' %} " class= "btn btn-outline-primary ">
+        <i class= "fas fa-home "></i> Accueil
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="container mt-5">
+    <h2>Lives en direct</h2>
+
+    {% for live in lives %}
+      <div style= "margin-bottom : 20px ; ">
+        <h3>{{ live.titre }}</h3>
+        <p>{{ live.description }}</p>
+    
+        {% if live.platform == 'youtube' %}
+          <iframe width= "560 " height= "315 " src= "{{ live.url|safe }} " frameborder= "0 " allowfullscreen></iframe>
+        {% elif live.platform == 'facebook' %}
+          <div class= "fb-video " data-href= "{{ live.url }} " data-width= "500 " data-show-text= "false "></div>
+        {% elif live.platform == 'tiktok' %}
+          <blockquote class= "tiktok-embed " cite= "{{ live.url }} " data-video-id= " " style= "max-width : 325px ; "></blockquote>
+          <script async src= "https://www.tiktok.com/embed.js "></script>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% load static %} 
+   
+      
+  </div>
+  <footer class="bg-dark text-white text-center p-3 mt-4">
+    <div class="mb-2">Suivez-nous :</div>
+    <a class="btn btn-outline-light btn-sm" href="https://wa.me/221000000000" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a class="btn btn-outline-light btn-sm" href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+    <a class="btn btn-outline-light btn-sm" href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a class="btn btn-outline-light btn-sm" href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+    <div class="mt-3">
+      <a href="https://www.orange.sn/money/" target="_blank" class="btn btn-warning btn-sm">
+        <i class="fas fa-hand-holding-heart"></i> Nous soutenir via Orange Money
+      </a>
+    </div>
+  </footer>
+  </body>
+  </html>
+  
