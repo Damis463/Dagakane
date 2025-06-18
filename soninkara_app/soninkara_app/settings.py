@@ -4,8 +4,9 @@ import os
 # Chemin de base du projet
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Clé secrète (change-la pour la production)
-SECRET_KEY = 'django-insecure-pf*k=3b&-+)w_bnd91h2&a5stl8z%c*miz#6x#k*yu7tf88-zj'
+
+SECRET_KEY = config("DJANGO_SECRET_KEY")
+DEBUG = config("DEBUG", cast=bool, default=False)
 
 # Mode debug (Désactive-le en production)
 DEBUG = True
