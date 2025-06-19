@@ -16,3 +16,4 @@ tzdata==2025.2
 whitenoise==6.9.0
 boto3
 django-storages
+python-decouple

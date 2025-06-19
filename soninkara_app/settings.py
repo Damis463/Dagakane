@@ -131,6 +131,12 @@ AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Clé publique Tebi
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')  # Clé secrète Tebi
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')  # Nom du bucket Tebi (ex: soninkara-media)
 AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # URL du endpoint S3 chez Tebi
+# Organisation des fichiers dans le bucket
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # Cache pour 1 jour
+}
 
+# Optionnel: préfixe de dossier dans le bucket
+AWS_LOCATION = 'media'  # Tous les fichiers seront dans le dossier 'media' du bucket
 AWS_S3_FILE_OVERWRITE = False  # Ne pas écraser les fichiers avec le même nom
-AWS_QUERYSTRING_AUTH = False  # Génère des URLs simples et publiques (sans token)
+AWS_QUERYSTRING_AUTH = None  # Génère des URLs simples et publiques (sans token)
