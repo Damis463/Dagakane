@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     # 📦 Stockage distant (Tebi.io via S3 protocol)
     'storages',
 ]
-
+INSTALLED_APPS += ['storages']
 # ⚙️ Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
