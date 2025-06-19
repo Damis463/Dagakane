@@ -1,0 +1,1 @@
+web: gunicorn soninkara_app.wsgi --log-file -

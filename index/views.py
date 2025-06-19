@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import VideoDivers
+from .models import Debat, VideoDivers
 # Create your views here.
 from django.shortcuts import render, get_object_or_404
 
@@ -195,9 +195,6 @@ def increment_like(request, pk):
         return Response({'error': 'Vidéo non trouvée'}, status=status.HTTP_404_NOT_FOUND)
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import Debat
-from django.http import JsonResponse
 
 # Vue liste des débats
 def debat_list(request):

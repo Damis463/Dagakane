@@ -1,17 +1,15 @@
-from argparse import Action
-import random
+
 from rest_framework.decorators import action
 
-
-
 from rest_framework.generics import ListAPIView
-
+from rest_framework.permissions import AllowAny
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from .serializers import PubliciteSerializer
 from rest_framework.response import  Response
 
 from rest_framework import viewsets,status
-from index.models import Actualite, Debat, Evenement, Live, Musique, Chronique, Interview, Publicite, VideoDivers
-from .serializers import ActualiteSerializer, DebatSerializer, EvenementSerializer, InterviewSerializer, ChroniqueSerializer, LiveSerializer, MusiqueSerializer, PubliciteSerializer, VideoDiversSerializer
+from index.models import Actualite, Debat, Evenement, Live, Chronique, Interview, Publicite, VideoDivers
+from .serializers import ActualiteSerializer, DebatSerializer, EvenementSerializer, InterviewSerializer, ChroniqueSerializer, LiveSerializer, PubliciteSerializer, VideoDiversSerializer
 
 
 
@@ -181,11 +179,7 @@ class VideoDiversViewSet(viewsets.ModelViewSet):
         video.save()
         return Response({'status': 'like ajouté', 'likes': video.likes})
 
-
-
-
-class PubliciteActivesView(ListAPIView):
+class PubliciteViewSet(ReadOnlyModelViewSet):
     queryset = Publicite.objects.filter(actif=True).order_by('-date_publication')
     serializer_class = PubliciteSerializer
-
-
+    permission_classes = [AllowAny]

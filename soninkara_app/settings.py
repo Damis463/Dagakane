@@ -1,14 +1,17 @@
+
 from pathlib import Path
 import os
-
+from decouple import config, Csv
+import dj_database_url
 # Chemin de base du projet
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Clé secrète (change-la pour la production)
-SECRET_KEY = 'django-insecure-pf*k=3b&-+)w_bnd91h2&a5stl8z%c*miz#6x#k*yu7tf88-zj'
+SECRET_KEY = config("DJANGO_SECRET_KEY")
+DEBUG      = config("DEBUG", cast=bool, default=False)
 
 # Mode debug (Désactive-le en production)
-DEBUG = True
+
 
 # Autoriser toutes les IPs (Flutter, mobile, navigateur, etc.)
 ALLOWED_HOSTS = ['*']
@@ -67,12 +70,10 @@ WSGI_APPLICATION = 'soninkara_app.wsgi.application'
 
 # Base de données
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=config("DATABASE_URL")
+    )
 }
-
 # Validation des mots de passe
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -96,10 +97,6 @@ TIME_ZONE = 'Africa/Bamako'
 USE_I18N = True
 USE_TZ = True
 
-# Fichiers statiques (CSS, JS, etc.)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Fichiers médias (images, vidéos uploadées)
 MEDIA_URL = '/media/'

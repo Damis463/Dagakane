@@ -16,7 +16,7 @@ router.register(r'chroniques', ChroniqueViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'videos', VideoDiversViewSet)
 router.register(r'debats', DebatViewSet)
-router.register(r'publicites', PubliciteViewSet, basename='publicite')
+router.register(r'publicites',PubliciteViewSet, basename='publicite')
 
 urlpatterns = [
     

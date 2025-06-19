@@ -2,6 +2,8 @@ from django.urls import path, include
 
 
 
+
+
 from . import views
 
 
@@ -23,7 +25,6 @@ urlpatterns = [
     path('videos/', views.VideoDivers, name='videos'),
     path('api/videos/<int:pk>/vue/', views.increment_vue),
     path('api/videos/<int:pk>/like/', views.increment_like),
-
 
     path('interviews/', views.interviews_list, name='interviews'),
    # path('interview/<int:id>/', views.Interview_detail, name='interview_detail'),
