@@ -8,7 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Routes de l'application principale
-    path('', include('index.urls')),
+  
 
     # Inclusion des routes API (qui contiennent le router)
     path('api/', include('api.urls')),

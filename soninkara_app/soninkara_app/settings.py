@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 
+from dj_database_url import config
+
 # Chemin de base du projet
 BASE_DIR = Path(__file__).resolve().parent.parent
 

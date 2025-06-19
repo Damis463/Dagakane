@@ -33,7 +33,10 @@ INSTALLED_APPS = [
 
     # 📁 Tes apps personnalisées
     'index',
-      'api',  # Exemple
+    'api',
+    
+    # 📦 Stockage distant (Tebi.io via S3 protocol)
+    'storages',
 ]
 
 # ⚙️ Middleware
@@ -108,7 +111,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Pour que WhiteNoise gère les fichiers en production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# 📁 Fichiers médias (upload images/vidéos)
+# 📁 Fichiers médias (upload images/vidéos) — inutilisé si S3 activé
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -121,3 +124,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
+
+# 📦 Configuration du stockage Tebi.io (compatible S3)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'  # Utilise S3 comme stockage principal
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Clé publique Tebi
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')  # Clé secrète Tebi
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')  # Nom du bucket Tebi (ex: soninkara-media)
+AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # URL du endpoint S3 chez Tebi
+
+AWS_S3_FILE_OVERWRITE = False  # Ne pas écraser les fichiers avec le même nom
+AWS_QUERYSTRING_AUTH = False  # Génère des URLs simples et publiques (sans token)
