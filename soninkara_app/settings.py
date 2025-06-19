@@ -105,7 +105,7 @@ USE_I18N = True
 USE_TZ = True
 
 # 📁 Fichiers statiques (CSS, JS, etc.)
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Pour que WhiteNoise gère les fichiers en production
