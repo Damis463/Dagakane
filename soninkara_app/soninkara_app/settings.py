@@ -99,10 +99,7 @@ TIME_ZONE = 'Africa/Bamako'
 USE_I18N = True
 USE_TZ = True
 
-# Fichiers statiques (CSS, JS, etc.)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Fichiers médias (images, vidéos uploadées)
 MEDIA_URL = '/media/'
