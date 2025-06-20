@@ -111,9 +111,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Pour que WhiteNoise gère les fichiers en production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# 📁 Fichiers médias (upload images/vidéos) — inutilisé si S3 activé
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 🔑 Clé primaire par défaut
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -139,4 +136,5 @@ AWS_S3_OBJECT_PARAMETERS = {
 # Optionnel: préfixe de dossier dans le bucket
 AWS_LOCATION = 'media'  # Tous les fichiers seront dans le dossier 'media' du bucket
 AWS_S3_FILE_OVERWRITE = False  # Ne pas écraser les fichiers avec le même nom
-AWS_QUERYSTRING_AUTH = None  # Génère des URLs simples et publiques (sans token)
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False  # (Optionnel : désactive les tokens dans l'URL)
