@@ -59,7 +59,7 @@ ROOT_URLCONF = 'soninkara_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Tu peux ajouter des dossiers ici
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,17 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # 🗣️ Langue et fuseau horaire
 LANGUAGE_CODE = 'fr'
 TIME_ZONE = 'Africa/Bamako'
-
 USE_I18N = True
 USE_TZ = True
 
 # 📁 Fichiers statiques (CSS, JS, etc.)
-STATIC_URL = '/staticfiles/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Pour que WhiteNoise gère les fichiers en production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 # 🔑 Clé primaire par défaut
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -122,19 +118,32 @@ REST_FRAMEWORK = {
     ],
 }
 
-# 📦 Configuration du stockage Tebi.io (compatible S3)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'  # Utilise S3 comme stockage principal
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Clé publique Tebi
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')  # Clé secrète Tebi
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')  # Nom du bucket Tebi (ex: soninkara-media)
-AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # URL du endpoint S3 chez Tebi
-# Organisation des fichiers dans le bucket
+# ====================== CONFIGURATION TEBIO.IO ======================
+# Activation du stockage S3 pour les médias
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Configuration d'accès à Tebi.io
+AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')  # Clé d'accès Tebi
+AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')  # Clé secrète Tebi
+AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')  # Nom du bucket
+AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # Endpoint Tebi
+
+# Paramètres optimisés pour Tebi.io
 AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',  # Cache pour 1 jour
+    'CacheControl': 'max-age=86400',  # Cache de 1 jour
+    'ACL': 'public-read'  # Définit les permissions de lecture publique
 }
 
-# Optionnel: préfixe de dossier dans le bucket
-AWS_LOCATION = 'media'  # Tous les fichiers seront dans le dossier 'media' du bucket
-AWS_S3_FILE_OVERWRITE = False  # Ne pas écraser les fichiers avec le même nom
-AWS_DEFAULT_ACL = None
-AWS_QUERYSTRING_AUTH = False  # (Optionnel : désactive les tokens dans l'URL)
+AWS_LOCATION = 'media'  # Dossier de stockage dans le bucket
+AWS_S3_FILE_OVERWRITE = False  # Empêche l'écrasement des fichiers
+AWS_DEFAULT_ACL = 'public-read'  # Permissions par défaut
+AWS_QUERYSTRING_AUTH = False  # URLs publiques sans signature
+AWS_S3_REGION_NAME = 'eu-central-1'  # Région par défaut pour Tebi
+
+# Désactive le stockage local des médias en production
+if not DEBUG:
+    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io/{AWS_LOCATION}/'
+else:
+    # En mode développement, on peut utiliser le stockage local
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
