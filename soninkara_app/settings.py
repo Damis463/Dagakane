@@ -103,32 +103,14 @@ REST_FRAMEWORK = {
 }
 
 # =================== TEBI STORAGE ====================# =================== TEBI STORAGE ====================
-
-USE_TEBI = config('USE_TEBI', cast=bool, default=True)
-
-if USE_TEBI:
-    # 🔐 Clés Tebi.io depuis .env
-    AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')
-    AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')
-    AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')
-
-    # 🌐 Endpoint Tebi compatible S3
-    AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'
-
-    # ⚙️ Paramètres recommandés
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-    AWS_DEFAULT_ACL = None  # important pour éviter les erreurs d'accès
-    AWS_QUERYSTRING_AUTH = False
-    AWS_S3_FILE_OVERWRITE = False
-
-    # 📦 Backend de stockage Tebi
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-    # 📁 URL publique des médias Tebi
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io/'
-else:
-    # 📁 Stockage local (dev uniquement)
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Tebi.io S3 Storage Configuration
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.getenv('TEBI_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.getenv('TEBI_SECRET_KEY')
+AWS_STORAGE_BUCKET_NAME = 'soninkara-media'  # Votre bucket name
+AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # Endpoint Tebi.io
+AWS_S3_REGION_NAME = 'eu-central-1'  # Région par défaut
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io'
+AWS_DEFAULT_ACL = 'public-read'  # Ou 'private' selon vos besoins
+AWS_QUERYSTRING_AUTH = False  # Désactive l'authentification par URL
+AWS_S3_FILE_OVERWRITE = False  # Empêche l'écrasement des fichiers existants
