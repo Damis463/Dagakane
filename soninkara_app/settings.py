@@ -6,16 +6,16 @@ import dj_database_url
 # 📁 Chemin de base du projet
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔐 Clé secrète (utilise .env ou Render env vars)
+# 🔐 Clé secrète
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
-# 🐞 Mode debug
+# 🐞 Debug
 DEBUG = config("DEBUG", cast=bool, default=False)
 
-# 🌍 Hôtes autorisés (utilise CSV pour support Render)
+# 🌍 Hôtes autorisés
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="*")
 
-# 🌐 Autoriser toutes les origines (Flutter, navigateur...)
+# 🌐 CORS (Flutter / API)
 CORS_ALLOW_ALL_ORIGINS = True
 
 # 📦 Applications Django
@@ -27,23 +27,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 🔌 Extensions
     'rest_framework',
     'corsheaders',
+    'storages',
 
-    # 📁 Tes apps personnalisées
     'index',
     'api',
-    
-    # 📦 Stockage distant (Tebi.io via S3 protocol)
-    'storages',
 ]
 
 # ⚙️ Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Pour fichiers statiques sur Render
-    'corsheaders.middleware.CorsMiddleware',       # Pour Flutter/API
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,10 +48,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# 🔗 Fichier URLs principal
+# 🔗 URLs
 ROOT_URLCONF = 'soninkara_app.urls'
 
-# 🧩 Templates HTML
+# 🧩 Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -74,76 +70,68 @@ TEMPLATES = [
 # 🚀 WSGI
 WSGI_APPLICATION = 'soninkara_app.wsgi.application'
 
-# 🗄️ Base de données via dj-database-url
+# 🗄️ Base de données
 DATABASES = {
     'default': dj_database_url.config(
         default=config("DATABASE_URL")
     )
 }
 
-# 🔐 Validation des mots de passe
+# 🔐 Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# 🗣️ Langue et fuseau horaire
+# 🌍 Langue et fuseau horaire
 LANGUAGE_CODE = 'fr'
 TIME_ZONE = 'Africa/Bamako'
 USE_I18N = True
 USE_TZ = True
 
-# 📁 Fichiers statiques (CSS, JS, etc.)
+# 📁 Fichiers statiques
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# 🔑 Clé primaire par défaut
+# 🔑 AutoField
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ⚙️ Django REST Framework config
+# ⚙️ Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
 }
 
-# ====================== CONFIGURATION TEBIO.IO ======================
-# Activation du stockage S3 pour les médias
+# =================== TEBI.IO STORAGE ====================
+
+# 🔐 Lecture des clés depuis .env
+TEBIO_ACCESS_KEY = config('TEBIO_ACCESS_KEY')
+TEBIO_SECRET_KEY = config('TEBIO_SECRET_KEY')
+TEBIO_BUCKET_NAME = config('TEBIO_BUCKET_NAME')
+AWS_LOCATION = config('AWS_LOCATION', default='media')
+
+# 📦 Stockage distant S3 (Tebi)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# Configuration d'accès à Tebi.io
-AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')  # Clé d'accès Tebi
-AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')  # Clé secrète Tebi
-AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')  # Nom du bucket
-AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'  # Endpoint Tebi
-
-# Paramètres optimisés pour Tebi.io
+AWS_ACCESS_KEY_ID = TEBIO_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY = TEBIO_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = TEBIO_BUCKET_NAME
+AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'
 AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',  # Cache de 1 jour
-    'ACL': 'public-read'  # Définit les permissions de lecture publique
+    'CacheControl': 'max-age=86400',
+    'ACL': 'public-read',
 }
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_REGION_NAME = 'eu-central-1'
 
-AWS_LOCATION = 'media'  # Dossier de stockage dans le bucket
-AWS_S3_FILE_OVERWRITE = False  # Empêche l'écrasement des fichiers
-AWS_DEFAULT_ACL = 'public-read'  # Permissions par défaut
-AWS_QUERYSTRING_AUTH = False  # URLs publiques sans signature
-AWS_S3_REGION_NAME = 'eu-central-1'  # Région par défaut pour Tebi
-
-# Désactive le stockage local des médias en production
+# 📁 MEDIA files
 if not DEBUG:
     MEDIA_URL = f'https://{TEBIO_BUCKET_NAME}.s3.tebi.io/{AWS_LOCATION}/'
 else:
-    # En mode développement, on peut utiliser le stockage local
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
