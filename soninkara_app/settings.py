@@ -104,27 +104,31 @@ REST_FRAMEWORK = {
 
 # =================== TEBI STORAGE ====================
 
-# 🔐 Clés et configuration via .env
-AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')
-AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'
-AWS_S3_REGION_NAME = 'eu-central-1'
-AWS_LOCATION = config('AWS_LOCATION', default='media')
+USE_TEBI = config('USE_TEBI', cast=bool, default=True)
 
-# 📦 Storage backend S3 (Tebi)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-    'ACL': 'public-read',
-}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_FILE_OVERWRITE = False
+if USE_TEBI:
+    # 🔐 Clés via .env
+    AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')
 
-# 📁 Fichiers médias
-if not DEBUG:
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io/{AWS_LOCATION}/'
+    # 🌐 Endpoint Tebi
+    AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'
+
+    # ⚙️ Paramètres recommandés
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+
+    # 📦 Stockage Tebi
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    # 📁 URL publique des fichiers médias sur Tebi
+    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io/'    
 else:
+    # 📁 Fichiers médias en local (pour dev/localhost)
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
