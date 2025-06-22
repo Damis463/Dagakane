@@ -88,6 +88,9 @@ USE_I18N = True
 USE_TZ = True
 
 # 📁 Fichiers statiques
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if os.environ.get('RENDER'):MEDIA_URL= 'https://dagakane.onrender.com/media/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
