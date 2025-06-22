@@ -108,9 +108,9 @@ USE_TEBI = config('USE_TEBI', cast=bool, default=True)
 
 if USE_TEBI:
     # 🔐 Clés via .env
-    AWS_ACCESS_KEY_ID = config('TEBIO_ACCESS_KEY')
-    AWS_SECRET_ACCESS_KEY = config('TEBIO_SECRET_KEY')
-    AWS_STORAGE_BUCKET_NAME = config('TEBIO_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 
     # 🌐 Endpoint Tebi
     AWS_S3_ENDPOINT_URL = 'https://s3.tebi.io'
