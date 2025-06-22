@@ -142,7 +142,7 @@ AWS_S3_REGION_NAME = 'eu-central-1'  # Région par défaut pour Tebi
 
 # Désactive le stockage local des médias en production
 if not DEBUG:
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.tebi.io/{AWS_LOCATION}/'
+    MEDIA_URL = f'https://{TEBIO_BUCKET_NAME}.s3.tebi.io/{AWS_LOCATION}/'
 else:
     # En mode développement, on peut utiliser le stockage local
     MEDIA_URL = '/media/'
